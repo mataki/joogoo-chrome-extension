@@ -14,30 +14,28 @@ var rotation = 0;
 var unreadCount = -1;
 var loadingAnimation = new LoadingAnimation();
 
-function getGmailUrl() {
-  var url = "https://mail.google.com/";
-  if (localStorage.customDomain)
-    url += localStorage.customDomain + "/";
-  else
-    url += "mail/"
+function getJoogooUrl() {
+  var url = "http://localhost:8888/news";
+  if (localStorage.accessToken)
+    url += "?access_token=" + localStorage.accessToken + "/";
   return url;
 }
 
-function getFeedUrl() {
-  return getGmailUrl() + "feed/atom";
-}
+// function getFeedUrl() {
+//   return getGmailUrl() + "feed/atom";
+// }
 
-function isGmailUrl(url) {
+// function isGmailUrl(url) {
   // This is the Gmail we're looking for if:
   // - starts with the correct gmail url
   // - doesn't contain any other path chars
-  var gmail = getGmailUrl();
-  if (url.indexOf(gmail) != 0)
-    return false;
+//  var gmail = getGmailUrl();
+//   if (url.indexOf(gmail) != 0)
+//    return false;
 
-  return url.length == gmail.length || url[gmail.length] == '?' ||
-                       url[gmail.length] == '#';
-}
+//   return url.length == gmail.length || url[gmail.length] == '?' ||
+//                       url[gmail.length] == '#';
+// }
 
 // A "loading" animation displayed while we wait for the first response from
 // Gmail. This animates the badge text with a dot that cycles from left to
@@ -82,13 +80,13 @@ LoadingAnimation.prototype.stop = function() {
 }
 
 
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
-  if (changeInfo.url && isGmailUrl(changeInfo.url)) {
-    getInboxCount(function(count) {
-      updateUnreadCount(count);
-    });
-  }
-});
+// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
+//   if (changeInfo.url && isGmailUrl(changeInfo.url)) {
+//     getInboxCount(function(count) {
+//       updateUnreadCount(count);
+//     });
+//   }
+// });
 
 
 function init() {
@@ -155,15 +153,14 @@ function getInboxCount(onSuccess, onError) {
         return;
 
       if (xhr.responseXML) {
-        var xmlDoc = xhr.responseXML;
-        var fullCountSet = xmlDoc.evaluate("/gmail:feed/gmail:fullcount",
-            xmlDoc, gmailNSResolver, XPathResult.ANY_TYPE, null);
-        var fullCountNode = fullCountSet.iterateNext();
-        if (fullCountNode) {
-          handleSuccess(fullCountNode.textContent);
+        var resp = JSON.parse(xhr.responseText);
+        if (resp instanceof Array) {
+          var count = resp.length;
+          handleSuccess(count);
+
           return;
         } else {
-          console.error(chrome.i18n.getMessage("gmailcheck_node_error"));
+          console.error("gmailcheck_node_error");
         }
       }
 
@@ -174,10 +171,10 @@ function getInboxCount(onSuccess, onError) {
       handleError();
     }
 
-    xhr.open("GET", getFeedUrl(), true);
+    xhr.open("GET", getJoogooUrl(), true);
     xhr.send(null);
   } catch(e) {
-    console.error(chrome.i18n.getMessage("gmailcheck_exception", e));
+    console.error("joogoo fetch exception");
     handleError();
   }
 }
