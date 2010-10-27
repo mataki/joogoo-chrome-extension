@@ -17,7 +17,7 @@ var loadingAnimation = new LoadingAnimation();
 function getJoogooUrl() {
   var url = "http://localhost:8888/news";
   if (localStorage.accessToken)
-    url += "?access_token=" + localStorage.accessToken + "/";
+    url += "?access_token=" + localStorage.accessToken;
   return url;
 }
 
@@ -85,12 +85,17 @@ function scheduleRequest() {
   window.setTimeout(startRequest, delay);
 }
 
+function popupNews(resp) {
+
+}
+
 // ajax stuff
 function startRequest() {
   getInboxCount(
-    function(count) {
+    function(count, resp) {
       loadingAnimation.stop();
       updateUnreadCount(count);
+      popupNews(resp);
       scheduleRequest();
     },
     function() {
@@ -107,11 +112,11 @@ function getInboxCount(onSuccess, onError) {
     xhr.abort();  // synchronously calls onreadystatechange
   }, requestTimeout);
 
-  function handleSuccess(count) {
+  function handleSuccess(count, resp) {
     requestFailureCount = 0;
     window.clearTimeout(abortTimerId);
     if (onSuccess)
-      onSuccess(count);
+      onSuccess(count, resp);
   }
 
   function handleError() {
@@ -126,11 +131,12 @@ function getInboxCount(onSuccess, onError) {
       if (xhr.readyState != 4)
         return;
 
-      if (xhr.responseXML) {
+      if (xhr.responseText) {
         var resp = JSON.parse(xhr.responseText);
         if (resp instanceof Array) {
           var count = resp.length;
-          handleSuccess(count);
+
+          handleSuccess(count, resp);
 
           return;
         } else {
@@ -146,7 +152,7 @@ function getInboxCount(onSuccess, onError) {
     }
 
     xhr.open("GET", getJoogooUrl(), true);
-    xhr.send(null);
+    xhr.send();
   } catch(e) {
     console.error("joogoo fetch exception");
     handleError();
