@@ -21,22 +21,6 @@ function getJoogooUrl() {
   return url;
 }
 
-// function getFeedUrl() {
-//   return getGmailUrl() + "feed/atom";
-// }
-
-// function isGmailUrl(url) {
-  // This is the Gmail we're looking for if:
-  // - starts with the correct gmail url
-  // - doesn't contain any other path chars
-//  var gmail = getGmailUrl();
-//   if (url.indexOf(gmail) != 0)
-//    return false;
-
-//   return url.length == gmail.length || url[gmail.length] == '?' ||
-//                       url[gmail.length] == '#';
-// }
-
 // A "loading" animation displayed while we wait for the first response from
 // Gmail. This animates the badge text with a dot that cycles from left to
 // right.
@@ -78,16 +62,6 @@ LoadingAnimation.prototype.stop = function() {
   window.clearInterval(this.timerId_);
   this.timerId_ = 0;
 }
-
-
-// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
-//   if (changeInfo.url && isGmailUrl(changeInfo.url)) {
-//     getInboxCount(function(count) {
-//       updateUnreadCount(count);
-//     });
-//   }
-// });
-
 
 function init() {
   canvas = document.getElementById('canvas');
@@ -179,19 +153,12 @@ function getInboxCount(onSuccess, onError) {
   }
 }
 
-function gmailNSResolver(prefix) {
-  if(prefix == 'gmail') {
-    return 'http://purl.org/atom/ns#';
-  }
-}
-
 function updateUnreadCount(count) {
   if (unreadCount != count) {
     unreadCount = count;
     animateFlip();
   }
 }
-
 
 function ease(x) {
   return (1-Math.sin(Math.PI/2+x*Math.PI))/2;
@@ -236,21 +203,8 @@ function drawIconAtRotation() {
       canvas.width,canvas.height)});
 }
 
-function goToInbox() {
-  chrome.tabs.getAllInWindow(undefined, function(tabs) {
-    for (var i = 0, tab; tab = tabs[i]; i++) {
-      if (tab.url && isGmailUrl(tab.url)) {
-        chrome.tabs.update(tab.id, {selected: true});
-        return;
-      }
-    }
-    chrome.tabs.create({url: getGmailUrl()});
-  });
-}
-
 // Called when the user clicks on the browser action.
 chrome.browserAction.onClicked.addListener(function(tab) {
-  goToInbox();
 });
 
 </script>
