@@ -86,7 +86,14 @@ function scheduleRequest() {
 }
 
 function popupNews(resp) {
-
+  for(var i in resp) {
+    var notification = webkitNotifications.createNotification(
+      'icon_128.png',  // icon url - can be relative
+      resp[i]["serviceName"],  // notification title
+      resp[i]["content"]  // notification body text
+    );
+    notification.show();
+  }
 }
 
 // ajax stuff
