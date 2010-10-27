@@ -3,7 +3,6 @@
   "browser_action": {
     "default_title": ""
   },
-  "default_locale": "en",
   "description": "joogoo chrome extension",
   "icons": {
     "128": "icon_128.png"
