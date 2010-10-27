@@ -11,7 +11,7 @@
   "name": "joogoo notifier",
   "options_page": "options.html",
   "permissions": [
-    "tabs", "http://localhost:8888/", "https://*.google.com/"
+    "tabs", "http://localhost:8888/"
    ],
   "version": "0.1"
 }

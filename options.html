@@ -50,17 +50,18 @@ body {
 </head>
 <body>
 
-<div id="header"><h1>Google Mail Checker Options</h1></div>
+<div id="header"><h1>joogoo notifier</h1></div>
 
-<div class="section-header first">Custom Domain</div>
-<p>To use Google Mail checker with Google Apps for Your Domain, enter the domain here.
+<div class="section-header first">Access Token</div>
+<p>To use joogoo notifier on Google Chrome, Input your access tonen on joogoo.</p>
 <p>
-  https://mail.google.com/<input type="text" id="custom-domain" oninput="markDirty()">
-    <em>(eg a/mydomain.com)</em>
+  <label name="custom-domain">Access Token</label>
+  <input type="text" id="custom-domain" oninput="markDirty()" />
+</p>
 
 <div id="footer">
-  <button id="save-button" style="font-weight:bold" onclick="save()"
-    >Save</button>
+  <button id="save-button" style="font-weight:bold" onclick="save()">
+    Save</button>
   <button onclick="init()">Cancel</button>
 </div>
 
@@ -74,12 +75,12 @@ function init() {
   customDomainsTextbox = document.getElementById("custom-domain");
   saveButton = document.getElementById("save-button");
 
-  customDomainsTextbox.value = localStorage.customDomain || "";
+  customDomainsTextbox.value = localStorage.accessToken || "";
   markClean();
 }
 
 function save() {
-  localStorage.customDomain = customDomainsTextbox.value;
+  localStorage.accessToken = customDomainsTextbox.value;
   markClean();
 
   chrome.extension.getBackgroundPage().init();
