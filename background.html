@@ -13,11 +13,31 @@ var requestTimeout = 1000 * 2;  // 5 seconds
 var rotation = 0;
 var unreadCount = -1;
 var loadingAnimation = new LoadingAnimation();
+var lastUpdatedAt;
+
+function getLastUpdatedAt(){
+  if(lastUpdatedAt){
+    return lastUpdatedAt.toISOString();
+  }else{
+    return "";
+  }
+}
 
 function getJoogooUrl() {
   var url = "http://localhost:8888/news";
-  if (localStorage.accessToken)
-    url += "?access_token=" + localStorage.accessToken;
+  url = appendParams(url, "access_token", localStorage.accessToken);
+  url = appendParams(url, "since", getLastUpdatedAt());
+  return url;
+}
+
+function appendParams(url, key, value){
+  if (value != null && value != "") {
+    if (url.match(/\?/)) {
+      url += ("&" + key + "=" + value);
+    } else {
+      url += ("?" + key + "=" + value);
+    }
+  }
   return url;
 }
 
@@ -87,12 +107,17 @@ function scheduleRequest() {
 
 function popupNews(resp) {
   for(var i in resp) {
-    var notification = webkitNotifications.createNotification(
-      'icon_128.png',  // icon url - can be relative
-      resp[i]["serviceName"],  // notification title
-      resp[i]["content"]  // notification body text
-    );
-    notification.show();
+    var service = resp[i];
+    var news = service["news"];
+    for(var k in news) {
+      news[k]
+      var notification = webkitNotifications.createNotification(
+        'icon_128.png',  // icon url - can be relative
+        service["name"],  // notification title
+        news[k]["content"]  // notification body text
+      );
+      notification.show();
+    }
   }
 }
 
@@ -120,13 +145,16 @@ function getInboxCount(onSuccess, onError) {
   }, requestTimeout);
 
   function handleSuccess(count, resp) {
+    console.log("Successed");
     requestFailureCount = 0;
     window.clearTimeout(abortTimerId);
+    lastUpdatedAt = new Date;
     if (onSuccess)
       onSuccess(count, resp);
   }
 
   function handleError() {
+    console.log("Error");
     ++requestFailureCount;
     window.clearTimeout(abortTimerId);
     if (onError)
