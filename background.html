@@ -170,7 +170,7 @@ function getInboxCount(onSuccess, onError) {
       if (xhr.responseText) {
         var resp = JSON.parse(xhr.responseText);
         if (resp instanceof Array) {
-          var count = resp.length;
+          var count = resp.length += '';
 
           handleSuccess(count, resp);
 
