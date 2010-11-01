@@ -24,7 +24,7 @@ function getLastUpdatedAt(){
 }
 
 function getJoogooUrl() {
-  var url = "http://http://joogoo-web.appspot.com/news";
+  var url = "http://joogoo-web.appspot.com/news";
 //  var url = "http://localhost:8888/news";
   url = appendParams(url, "access_token", localStorage.accessToken);
   url = appendParams(url, "since", getLastUpdatedAt());
