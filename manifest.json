@@ -1,7 +1,8 @@
 {
   "background_page": "background.html",
   "browser_action": {
-    "default_title": ""
+    "default_title": "joogoo",
+    "popup": "popup.html"
   },
   "description": "joogoo chrome extension",
   "icons": {
@@ -10,7 +11,9 @@
   "name": "joogoo notifier",
   "options_page": "options.html",
   "permissions": [
-    "http://joogoo-web.appspot.com/", "notifications"
+    "http://joogoo-web.appspot.com/",
+//    "http://localhost/",
+    "notifications"
    ],
   "version": "0.1"
 }

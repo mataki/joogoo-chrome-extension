@@ -122,12 +122,26 @@ function popupNews(resp) {
   }
 }
 
+// function updatePopup(resp){
+//     chrome.extension.getViews({type:"popup"})[0].$("#news").renderResponse(resp);
+// }
+
+var responseStore;
+function getResponse(){
+    return responseStore;
+}
+
+function storeResponse(resp) {
+    responseStore = resp;
+}
+
 // ajax stuff
 function startRequest() {
   getInboxCount(
     function(count, resp) {
       loadingAnimation.stop();
-      updateUnreadCount(count);
+//      updatePopup(resp);
+      storeResponse(resp);
       popupNews(resp);
       scheduleRequest();
     },
@@ -246,8 +260,8 @@ function drawIconAtRotation() {
 }
 
 // Called when the user clicks on the browser action.
-chrome.browserAction.onClicked.addListener(function(tab) {
-});
+// chrome.browserAction.onClicked.addListener(function(tab) {
+// });
 
 </script>
 </head>
