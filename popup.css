@@ -1,10 +1,10 @@
 @CHARSET "utf-8";
 
-.clear-both { clear: both; margin: 10px; }
+.clear-both { clear: both; }
 
-body { width: 420px; }
+body { width: 440px; }
 
-#news .service { float: left; width: 420px; border: 1px solid silver; -webkit-border-radius: 5px; border-radius: 5px; }
+#news .service { float: left; width: 95%; border: 1px solid silver; -webkit-border-radius: 5px; border-radius: 5px; }
 #news .service .service-name { padding: 10px; background: #eef; -webkit-border-radius: 5px; border-radius: 5px;}
 #news .service .contents { margin: 10px; }
 #news .service .contents .content { padding: 5px 0; border-bottom: 1px solid #eef;}
